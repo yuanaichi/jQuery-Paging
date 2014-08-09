@@ -249,12 +249,13 @@
                 return Paging;
             },
 
-            "setPage": function(page) {
+            "setPage": function(page, onlyFreshUi) {
 
 		if (Paging.opts["lock"]) {
                     Paging.opts["onSelect"](0);
 		    return Paging;
 		}
+                onlyFreshUi = onlyFreshUi | false;
 
                 if (undefined === page) {
 
@@ -264,7 +265,7 @@
                         return Paging;
                     }
 
-                } else if (Paging.opts["page"] == page) { // Necessary to be ==, not ===
+                } else if (Paging.opts["page"] == page && !onlyFreshUi) { // Necessary to be ==, not ===
                     return Paging;
                 }
 
@@ -508,12 +509,14 @@
                         }
                     });
 
-                    Paging.locate = opts["onSelect"].call({
-                        "number"	: number,
-                        "lapping"	: lapping,
-                        "pages"		: pages,
-                        "slice"		: data["slice"]
-                    }, page);
+                    if (!onlyFreshUi) {
+                        Paging.locate = opts["onSelect"].call({
+                            "number"	: number,
+                            "lapping"	: lapping,
+                            "pages"		: pages,
+                            "slice"		: data["slice"]
+                        }, page);
+                    }
                 }
                 return Paging;
             }
